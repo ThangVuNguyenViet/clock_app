@@ -128,6 +128,9 @@ class AlarmModel extends ChangeNotifier {
     const IOSNotificationDetails iOSPlatformChannelSpecifics =
         IOSNotificationDetails(
       sound: 'alarm.aiff',
+      presentSound: true,
+      presentAlert: true,
+      presentBadge: true,
     );
     const NotificationDetails platformChannelSpecifics = NotificationDetails(
       android: androidPlatformChannelSpecifics,
