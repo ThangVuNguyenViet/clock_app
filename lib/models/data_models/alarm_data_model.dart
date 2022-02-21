@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:hive/hive.dart';
 
 part 'alarm_data_model.g.dart';
@@ -16,7 +18,7 @@ class AlarmDataModel {
     required this.time,
     required this.weekdays,
   }) {
-    this.id = id ?? hashCode;
+    this.id = id ?? Random.secure().nextInt(10000 - 1000) + 1000;
   }
 
   AlarmDataModel copyWith({

@@ -98,7 +98,18 @@ class AlarmModel extends ChangeNotifier {
     final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
         FlutterLocalNotificationsPlugin();
 
-    await flutterLocalNotificationsPlugin.cancel(alarm.id);
+    final List<PendingNotificationRequest> pendingNotificationRequests =
+        await flutterLocalNotificationsPlugin.pendingNotificationRequests();
+    if (alarm.weekdays.isNotEmpty) {
+      for (var notification in pendingNotificationRequests) {
+        // get grouped id
+        if ((notification.id / 10).floor() == alarm.id) {
+          await flutterLocalNotificationsPlugin.cancel(notification.id);
+        }
+      }
+    } else {
+      await flutterLocalNotificationsPlugin.cancel(alarm.id);
+    }
   }
 
   Future<void> _scheduleAlarm(AlarmDataModel alarm) async {
@@ -139,16 +150,29 @@ class AlarmModel extends ChangeNotifier {
         androidAllowWhileIdle: true,
         uiLocalNotificationDateInterpretation:
             UILocalNotificationDateInterpretation.absoluteTime,
+        matchDateTimeComponents: DateTimeComponents.time,
       );
     } else {
-      await flutterLocalNotificationsPlugin.periodicallyShow(
-        alarm.id,
-        'Alarm at ${fromTimeToString(alarm.time)}',
-        'Ring Ring!!!',
-        RepeatInterval.weekly,
-        platformChannelSpecifics,
-        androidAllowWhileIdle: true,
-      );
+      for (var weekday in alarm.weekdays) {
+        await flutterLocalNotificationsPlugin.zonedSchedule(
+          // acts as an id, for cancelling later
+          alarm.id * 10 + weekday,
+          'Alarm at ${fromTimeToString(alarm.time)}',
+          'Ring Ring!!!',
+          TZDateTime.local(
+            alarm.time.year,
+            alarm.time.month,
+            alarm.time.day - alarm.time.weekday + weekday,
+            alarm.time.hour,
+            alarm.time.minute,
+          ),
+          platformChannelSpecifics,
+          androidAllowWhileIdle: true,
+          uiLocalNotificationDateInterpretation:
+              UILocalNotificationDateInterpretation.absoluteTime,
+          matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
+        );
+      }
     }
   }
 }
