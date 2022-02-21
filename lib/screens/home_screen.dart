@@ -77,7 +77,10 @@ class HomeScreen extends StatelessWidget {
           }),
         ],
       ),
-      body: const Body(),
+      body: const Padding(
+        padding: EdgeInsets.symmetric(vertical: 16.0),
+        child: Body(),
+      ),
       bottomSheet: const AlarmScheet(),
     );
   }
@@ -288,6 +291,9 @@ class CardAlarmItem extends StatelessWidget {
                     : alarm.weekdays
                         .map((weekday) => fromWeekdayToStringShort(weekday))
                         .join(', '),
+            style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
           ),
           trailing: IconButton(
             icon: const Icon(Icons.cancel),

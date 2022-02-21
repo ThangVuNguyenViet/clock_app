@@ -6,7 +6,7 @@ import 'constants.dart';
 // Our light/Primary Theme
 ThemeData themeData(BuildContext context) {
   return ThemeData(
-    appBarTheme: appBarTheme,
+    appBarTheme: appBarLightTheme,
     primaryColor: kPrimaryColor,
     scaffoldBackgroundColor: Colors.white,
     backgroundColor: Colors.white,
@@ -33,7 +33,7 @@ ThemeData darkThemeData(BuildContext context) {
   return ThemeData.dark().copyWith(
     primaryColor: kPrimaryColor,
     scaffoldBackgroundColor: const Color(0xFF0D0C0E),
-    appBarTheme: appBarTheme,
+    appBarTheme: appBarDarkTheme,
     backgroundColor: kBackgroundDarkColor,
     iconTheme: const IconThemeData(color: kBodyTextColorDark),
     primaryIconTheme: const IconThemeData(color: kPrimaryIconDarkColor),
@@ -43,7 +43,7 @@ ThemeData darkThemeData(BuildContext context) {
       headline4: const TextStyle(color: kTitleTextDarkColor, fontSize: 32),
       headline1: const TextStyle(color: kTitleTextDarkColor, fontSize: 80),
     ),
-    colorScheme: const ColorScheme.light(
+    colorScheme: const ColorScheme.dark(
       secondary: kSecondaryDarkColor,
       secondaryContainer: kAccentDarkColor,
       surface: kSurfaceDarkColor,
@@ -54,5 +54,13 @@ ThemeData darkThemeData(BuildContext context) {
   );
 }
 
-AppBarTheme appBarTheme =
-    const AppBarTheme(color: Colors.transparent, elevation: 0);
+AppBarTheme appBarLightTheme = AppBarTheme(
+  // affect the color of SystemUI
+  color: Colors.white.withOpacity(0),
+  elevation: 0,
+);
+AppBarTheme appBarDarkTheme = AppBarTheme(
+  // affect the color of SystemUI
+  color: Colors.black.withOpacity(0),
+  elevation: 0,
+);

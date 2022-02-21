@@ -64,18 +64,28 @@ class _ModifyAlarmScreenState extends State<ModifyAlarmScreen> {
         children: [
           SizedBox(
             height: 150,
-            child: CupertinoDatePicker(
-              mode: CupertinoDatePickerMode.time,
-              onDateTimeChanged: (value) {
-                setState(() {
-                  alarm = alarm.copyWith(time: value);
-                });
-              },
-              initialDateTime: alarm.time,
+            child: CupertinoTheme(
+              data: CupertinoThemeData(
+                brightness: Theme.of(context).brightness,
+              ),
+              child: CupertinoDatePicker(
+                mode: CupertinoDatePickerMode.time,
+                onDateTimeChanged: (value) {
+                  setState(() {
+                    alarm = alarm.copyWith(time: value);
+                  });
+                },
+                initialDateTime: alarm.time,
+              ),
             ),
           ),
           ExpansionTile(
-            title: const Text('Repeat'),
+            title: Text(
+              'Repeat',
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+            ),
             trailing: Text(
               alarm.weekdays.isEmpty
                   ? 'Never'
@@ -87,13 +97,22 @@ class _ModifyAlarmScreenState extends State<ModifyAlarmScreen> {
               maxLines: 1,
               softWrap: true,
               overflow: TextOverflow.ellipsis,
+              style: Theme.of(context).textTheme.bodyText2?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
             ),
             controlAffinity: ListTileControlAffinity.leading,
             children: List.generate(7, (index) => index + 1).map((weekday) {
               final checked = alarm.weekdays.contains(weekday);
               return CheckboxListTile(
-                  title: Text(fromWeekdayToString(weekday)),
+                  title: Text(
+                    fromWeekdayToString(weekday),
+                    style: Theme.of(context).textTheme.bodyText1?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                  ),
                   value: checked,
+                  activeColor: Theme.of(context).colorScheme.primary,
                   onChanged: (value) {
                     setState(() {
                       (value ?? false)
